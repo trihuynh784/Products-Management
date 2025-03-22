@@ -6,8 +6,6 @@ const systemConfig = require("../../config/system");
 
 // [GET] /admin/products
 module.exports.products = async (req, res) => {
-  // console.log(req.query);
-
   let find = {
     deleted: false,
   };
