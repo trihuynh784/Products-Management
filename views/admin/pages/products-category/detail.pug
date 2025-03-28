@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+
+block main 
+  if role.permissions.includes("products-category_view")
+    h1(class="mb-4") Chi tiết danh mục
+    
+    if category.title 
+      div(class="mb-4") 
+        h2  <b>#{category.title}</b>
+
+    if category.status 
+      .mb-4 
+        span Trạng thái:
+        if category.status == "active"
+          span(class="badge text-bg-success") Hoạt động
+        else
+          span(class="badge text-bg-danger") Dừng hoạt động
+
+    if category.position 
+      div(class="mb-4") Vị trí: <b>#{category.position}</b>
+
+    if category.description 
+      div(class="mb-4") !{category.description}
+    
+    if role.permissions.includes("products-category_edit")
+      a(
+        href=`${prefixAdmin}/products-category/edit/${category.id}`
+        class="btn btn-success"
+      ) Chỉnh sửa sản phẩm

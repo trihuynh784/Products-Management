@@ -1,0 +1,39 @@
+extends ../../layouts/default.pug
+
+block main 
+  if role.permissions.includes("account_view")
+    h1(class="mb-4") Chi tiết tài khoản
+    
+    if record.fullName 
+      div(class="mb-4") 
+        h2 <b>#{record.fullName}</b>
+    
+    if record.email
+      div(class="mb-4") Email: <b>#{record.email}</b>
+    
+    if record.phone 
+      div(class="mb-4") Số điện thoại: <b>#{record.phone}</b>
+    
+    if accountRole
+      div(class="mb-4") Nhóm quyền: <b>#{accountRole}</b>
+
+    if record.avatar 
+      .mb-4 
+        img(
+          src=record.avatar 
+          style="width: 100px"
+        ) 
+    
+    if record.status 
+      .mb-4 
+        span Trạng thái:
+        if record.status == "active"
+          span(class="badge text-bg-success") Hoạt động
+        else
+          span(class="badge text-bg-danger") Dừng hoạt động
+
+    if role.permissions.includes("account_edit")
+      a(
+        href=`${prefixAdmin}/accounts/edit/${record.id}`
+        class="btn btn-success"
+      ) Chỉnh sửa tài khoản

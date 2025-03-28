@@ -6,54 +6,56 @@ include ../../mixins/form-change-multi.pug
 include ../../mixins/form-search.pug
 
 block main 
-  +alert-success(5000)
-  +alert-error(3000)
-  h1 Danh mục sản phẩm
+  if role.permissions.includes("products-category_view")
+    +alert-success(5000)
+    +alert-error(3000)
+    h1 Danh mục sản phẩm
 
-  .card.mb-3 
-    .card-header Bộ lọc và tìm kiếm
-    .card-body 
-      .row 
-        .col-6 
-          +filter-status(filterStatus)
-        .col-6
-          +form-search(keyword)
+    .card.mb-3 
+      .card-header Bộ lọc và tìm kiếm
+      .card-body 
+        .row 
+          .col-6 
+            +filter-status(filterStatus)
+          .col-6
+            +form-search(keyword)
 
-  .card.mb-3 
-    .card-header Danh sách
-    .card-body 
-      .row 
-        .col-8
-          +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
-        .col-4 
-          a(
-            href=`${prefixAdmin}/products-category/create`
-            class="btn btn-outline-success"
-          ) + Thêm mới
+    .card.mb-3 
+      .card-header Danh sách
+      .card-body 
+        .row 
+          .col-8
+            if role.permissions.includes("products-category_edit")
+              +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
+          .col-4
+            if role.permissions.includes("products-category_create") 
+              a(
+                href=`${prefixAdmin}/products-category/create`
+                class="btn btn-outline-success"
+              ) + Thêm mới
 
-    table(
-      class="table table-hover table-sm"
-      checkbox-multi
-    )
-      thead 
-        tr.mb-2 
-          th 
-            input(type="checkbox" name="checkAll")
-          th STT
-          //- th Hình ảnh
-          th Tiêu đề
-          th Vị trí
-          th Trạng thái
-          th Hành động 
+      table(
+        class="table table-hover table-sm"
+        checkbox-multi
+      )
+        thead 
+          tr.mb-2 
+            if role.permissions.includes("products-category_edit")
+              th 
+                input(type="checkbox" name="checkAll")
+            th STT
+            th Tiêu đề
+            th Vị trí
+            th Trạng thái
+            th Người cập nhật
+            th Hành động 
 
-      tbody 
-        +table-tree(records)
+        tbody 
+          +table-tree(records)
 
-  form(
-    action=""
-    method="POST"
-    id="form-change-status"
-    data-path=`${prefixAdmin}/products-category/change-status`
-  ) 
-  
-  script(src="/admin/js/products-category.js")
+    form(
+      action=""
+      method="POST"
+      id="form-change-status"
+      data-path=`${prefixAdmin}/products-category/change-status`
+    ) 

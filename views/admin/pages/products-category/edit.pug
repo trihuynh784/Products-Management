@@ -1,0 +1,75 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
+block main
+  +alert-success(4000)
+  +alert-error(3000)
+
+  h1(class="mb-4") Chỉnh sửa danh mục
+  
+  form(
+    action=`${prefixAdmin}/products-category/edit/${record.id}?_method=PATCH`
+    id="form-edit-product"
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    div(class="form-group mb-2")
+      label(for="title") Tiêu đề
+      input(
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        value=record.title
+        required
+      )
+    div(class="form-group mb-2")
+      label(for="parent_id") Danh mục cha
+      select(
+        id="parent_id"
+        name="parent_id"
+        class="form-control"
+      )
+        option(value="") -- Chọn danh mục cha --
+        if records
+          +select-tree(records, 1, record.parent_id)
+    div(class="form-group mb-2")
+      label(for="description") Mô tả
+      textarea(
+        class="form-control textarea-mce"
+        id="description"
+        name="description"
+        rows="5"
+      ) !{record.description}
+    div(class="form-group mb-2")
+      label(for="position") Vị trí
+      input(
+        type="number"
+        id="position"
+        name="position"
+        class="form-control"
+        min="0"
+        value=record.position
+      )
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        id="status"
+        name="status"
+        value="active"
+        class="form-check-input"
+        checked=(record.status == "active")
+      )
+      label(for="status" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        id="status"
+        name="status"
+        value="inactive"
+        class="form-check-input"
+        checked=(record.status == "inactive")
+      )
+      label(for="status" class="form-check-label") Dừng hoạt động
+    button(type="submit" class="btn btn-primary d-block mt-3") Cập nhật

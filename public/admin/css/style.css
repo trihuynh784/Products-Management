@@ -87,6 +87,7 @@ a {text-decoration: none;}
 
 /* Image Preview */
 .image-preview {
+  aspect-ratio: 4/3;
   display: block;
   width: 180px;
   height: auto;
@@ -96,6 +97,7 @@ a {text-decoration: none;}
   border-radius: 5px;
 }
 .image-preview[src=""] {
+  aspect-ratio: 4/3;
   display: none;
 }
 .dis-none {

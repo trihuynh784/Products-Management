@@ -2,45 +2,55 @@ const mongoose = require("mongoose");
 const slug = require("mongoose-slug-updater");
 mongoose.plugin(slug);
 
-const ProductsCategorySchema = new mongoose.Schema({
-  title: String,
-  parent_id: {
-    type: String,
-    default: "",
+const ProductsCategorySchema = new mongoose.Schema(
+  {
+    title: String,
+    parent_id: {
+      type: String,
+      default: "",
+    },
+    description: String,
+    thumbnail: String,
+    status: String,
+    position: Number,
+    slug: {
+      type: String,
+      slug: "title",
+      unique: true,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    updatedBy: [
+      {
+        account_id: String,
+        updatedAt: Date,
+      },
+    ],
   },
-  description: String,
-  thumbnail: String,
-  status: String,
-  position: Number,
-  slug: {
-    type: String,
-    slug: "title",
-    unique: true
-  },
-  deleted: {
-    type: Boolean,
-    default: false
-  },
-  deletedAt: Date,
+  {
+    timestamps: true,
+  }
+);
 
-}, {
-  timestamps: true
-});
-
-const ProductsCategory = mongoose.model("ProductsCategory", ProductsCategorySchema, "products-category");
+const ProductsCategory = mongoose.model(
+  "ProductsCategory",
+  ProductsCategorySchema,
+  "products-category"
+);
 
 module.exports = ProductsCategory;
 
-
 //- _id
 //- title
-//- description 
-//- parent_id 
+//- description
+//- parent_id
 //- thumbnail
-//- status 
-//- position 
-//- slug 
+//- status
+//- position
+//- slug
 //- deleted
-//- deletedAt 
-//- createdAt 
+//- deletedAt
+//- createdAt
 //- updatedAt

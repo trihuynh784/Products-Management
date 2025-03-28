@@ -57,11 +57,13 @@ if (checkboxMulti) {
   const checkAll = checkboxMulti.querySelector("input[name='checkAll']");
   const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
 
-  checkAll.addEventListener("click", () => {
-    inputsId.forEach((input) => {
-      input.checked = checkAll.checked ? true : false;
+  if (checkAll) {
+    checkAll.addEventListener("click", () => {
+      inputsId.forEach((input) => {
+        input.checked = checkAll.checked ? true : false;
+      });
     });
-  });
+  }
 
   inputsId.forEach((input) => {
     input.addEventListener("click", () => {
@@ -78,6 +80,78 @@ if (checkboxMulti) {
   });
 }
 // End Checkbox
+
+// Delete Item
+const deleteItem = document.getElementById("form-delete-item");
+if (deleteItem) {
+  const buttonDeleteItem = document.querySelectorAll("#button-delete-item");
+
+  buttonDeleteItem.forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.value;
+      const path = deleteItem.getAttribute("data-path");
+
+      deleteItem.action = path + `/${id}?_method=PATCH`;
+      deleteItem.submit();
+    });
+  });
+}
+// End Delete Item
+
+// Change Status
+const buttonsChangeStatus = document.querySelectorAll(
+  "a[button-change-status]"
+);
+if (buttonsChangeStatus.length) {
+  const formChangeStatus = document.querySelector("#form-change-status");
+  const path = formChangeStatus.getAttribute("data-path");
+  buttonsChangeStatus.forEach((button) => {
+    button.addEventListener("click", () => {
+      const status = button.getAttribute("data-status") == "active" ? "inactive" : "active";
+      const id = button.getAttribute("data-id");
+      formChangeStatus.action = path + `/${status}/${id}?_method=PATCH`;
+      formChangeStatus.submit();
+    });
+  });
+}
+// End Change Status
+
+// Sort
+const sort = document.querySelector("[sort]");
+if (sort) {
+  let url = new URL(window.location.href);
+  const sortSelect = sort.querySelector("select[sort-select]");
+
+  // Sort
+  sortSelect.addEventListener("change", (e) => {
+    const [sortKey, sortValue] = e.target.value.split("-");
+
+    url.searchParams.set("sortKey", sortKey);
+    url.searchParams.set("sortValue", sortValue);
+
+    window.location.href = url.href;
+  });
+
+  // Selected
+  const sortKey = url.searchParams.get("sortKey");
+  const sortValue = url.searchParams.get("sortValue");
+  if (sortKey && sortValue) {
+    const optionSelected = sortSelect.querySelector(
+      `option[value="${sortKey}-${sortValue}"]`
+    );
+    optionSelected.selected = true;
+  }
+
+  // Clear
+  const sortClear = sort.querySelector("button[sort-clear]");
+  sortClear.addEventListener("click", () => {
+    url.searchParams.delete("sortKey");
+    url.searchParams.delete("sortValue");
+
+    window.location.href = url.href;
+  });
+}
+// End Sort
 
 // Form Change Multi
 const formChangeMulti = document.querySelector("[form-change-multi]");
@@ -139,14 +213,16 @@ if (showAlert) {
 const uploadImage = document.querySelector("[upload-image]");
 if (uploadImage) {
   const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
-  const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
+  const uploadImagePreview = uploadImage.querySelector(
+    "[upload-image-preview]"
+  );
   const closeImagePreview = uploadImage.querySelector("[close-image-preview]");
-  
+
   closeImagePreview.addEventListener("click", () => {
     uploadImageInput.value = "";
     uploadImagePreview.src = "";
   });
-  
+
   uploadImageInput.addEventListener("change", (e) => {
     const [file] = e.target.files;
 

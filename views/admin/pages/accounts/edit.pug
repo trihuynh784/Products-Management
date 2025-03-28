@@ -1,0 +1,97 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+  if role.permissions.includes("account_edit")
+    h1.mb-4 Chỉnh sửa tài khoản
+
+    +alert-error(5000)
+
+    form(
+      action=`${prefixAdmin}/accounts/edit/${record._id}?_method=PATCH`
+      method="POST"
+      enctype="multipart/form-data"
+    )
+      div(class="form-group mb-2")
+        label(for="fullName") Họ tên *
+        input(
+          type="text"
+          id="fullName"
+          name="fullName"
+          class="form-control"
+          value=record.fullName
+          required
+        )
+      div(class="form-group mb-2")
+        label(for="email") Email *
+        input(
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          value=record.email
+          required
+        )
+      div(class="form-group mb-2")
+        label(for="password") Mật khẩu *
+        input(
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+        )
+      div(class="form-group mb-2")
+        label(for="phone") Số điện thoại
+        input(
+          type="text"
+          id="phone"
+          name="phone"
+          class="form-control"
+          value=record.phone
+        )
+      div(
+        class="form-group mb-2"
+        upload-image
+      )
+        .mb-1
+          label(for="avatar") Ảnh đại diện
+        input(
+          type="file"
+          id="avatar"
+          name="avatar"
+          class="form-control-file"
+          accept="image/*"
+          upload-image-input
+        )
+        span(close-image-preview class="btn btn-warning") Xóa ảnh
+        img(
+          src=record.avatar
+          upload-image-preview
+          class="image-preview"
+        )
+      div(class="form-group mb-2")
+        label(for="role_id" class="mb-1") Phân quyền 
+        select(name="role_id" id="role_id" class="form-control")
+          option(disabled selected) --- Chọn quyền ---
+          each item in roles
+            option(value=item._id selected=record.role_id==item._id) #{item.title}
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          id="status1"
+          name="status"
+          value="active"
+          class="form-check-input"
+          checked
+        )
+        label(for="status1" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          id="status2"
+          name="status"
+          value="inactive"
+          class="form-check-input"
+        )
+        label(for="status2" class="form-check-label") Dừng hoạt động
+      button(type="submit" class="btn btn-primary d-block mt-1") Cập nhật

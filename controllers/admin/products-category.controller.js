@@ -1,4 +1,5 @@
 const ProductsCategory = require("../../models/products-category.model");
+const Account = require("../../models/account.model");
 const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree");
 const filterStatusHelper = require("../../helpers/filterStatus");
@@ -22,15 +23,31 @@ module.exports.index = async (req, res) => {
     find.title = objectSearch.regex;
   }
 
-  let records = await ProductsCategory.find(find);
+  // Sort
+  const sort = {
+    position: "desc",
+  };
+
+  let records = await ProductsCategory.find(find).sort(sort);
 
   records = createTreeHelper.createTree(records);
+
+  for (const record of records) {
+    const updatedBy = record.updatedBy.slice(-1)[0];
+    if (updatedBy) {
+      const user = await Account.findOne({
+        _id: updatedBy.account_id,
+      });
+
+      updatedBy.fullName = user.fullName;
+    }
+  }
 
   res.render("admin/pages/products-category/index", {
     titlePage: "Danh mục sản phẩm",
     records: records,
     filterStatus: filterStatus,
-    keyword: objectSearch.keyword
+    keyword: objectSearch.keyword,
   });
 };
 
@@ -65,7 +82,7 @@ module.exports.createPost = async (req, res) => {
   res.redirect(`${systemConfig.prefixAdmin}/products-category`);
 };
 
-// [POST] /admin/products-category/change-status/:status/:id
+// [PATCH] /admin/products-category/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
   try {
     let find = {
@@ -84,6 +101,7 @@ module.exports.changeStatus = async (req, res) => {
   }
 };
 
+// [PATCH] /admin/products-category/change-multi
 module.exports.changeMulti = async (req, res) => {
   if (req.body) {
     const ids = req.body.ids.split(", ");
@@ -135,4 +153,70 @@ module.exports.changeMulti = async (req, res) => {
 
     res.redirect("back");
   }
+};
+
+// [GET] /admin/products-category/detail/:id
+module.exports.detail = async (req, res) => {
+  let category = {};
+  if (req.params) {
+    category = await ProductsCategory.findOne({ _id: req.params.id });
+  }
+
+  res.render("admin/pages/products-category/detail", {
+    titlePage: "Chi tiết danh mục",
+    category: category,
+  });
+};
+
+// [GET] /admin/products-category/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    let record = {};
+    if (req.params) {
+      record = await ProductsCategory.findOne({ _id: req.params.id });
+    }
+
+    const find = {
+      deleted: false,
+    };
+
+    let records = await ProductsCategory.find(find).lean();
+
+    records = createTreeHelper.createTree(records);
+
+    res.render("admin/pages/products-category/edit", {
+      titlePage: "Chỉnh sửa danh mục",
+      record: record,
+      records: records,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
+};
+
+// [PATCH] /admin/products-category/editPatch/:id
+module.exports.editPatch = async (req, res) => {
+  await ProductsCategory.updateOne(
+    { _id: req.params.id },
+    {
+      ...req.body,
+      $push: {
+        updatedBy: {
+          account_id: res.locals.user._id,
+          updatedAt: new Date(),
+        },
+      },
+    }
+  );
+
+  res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+};
+
+// [PATCH] /admin/products-category/deleteItem/:id
+module.exports.deleteItem = async (req, res) => {
+  if (req.params) {
+    await ProductsCategory.updateOne({ _id: req.params.id }, { deleted: true });
+  }
+
+  res.redirect("back");
 };

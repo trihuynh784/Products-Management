@@ -1,0 +1,17 @@
+extends ../../layouts/default.pug
+
+block main  
+  if role.permissions.includes("roles_view")
+    h1.mb-4 Chi tiết nhóm quyền
+
+    if record.title 
+      div(class="mb-4") Tiêu đề: <b>#{record.title}</b>
+    
+    if record.description 
+      div(class="mb-4") Mô tả: <b>#{record.description }</b>
+
+    if role.permissions.includes("roles_edit")
+      a(
+        href=`${prefixAdmin}/roles/edit/${record._id}`
+        class="btn btn-success"
+      ) Chỉnh sửa nhóm quyền

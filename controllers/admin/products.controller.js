@@ -1,7 +1,10 @@
 const Products = require("../../models/products.model");
+const ProductsCategory = require("../../models/products-category.model");
+const Account = require("../../models/account.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
+const createTreeHelper = require("../../helpers/createTree");
 const systemConfig = require("../../config/system");
 
 // [GET] /admin/products
@@ -51,8 +54,27 @@ module.exports.products = async (req, res) => {
     .limit(objectPagination.limitProducts)
     .skip(objectPagination.skip);
 
+  for (const product of products) {
+    const user = await Account.findOne({
+      _id: product.createdBy.account_id,
+    });
+
+    if (user) {
+      product.accountFullName = user.fullName;
+    }
+
+    const updatedBy = product.updatedBy.slice(-1)[0];
+    if (updatedBy) {
+      const userUpdated = await Account.findOne({
+        _id: updatedBy.account_id
+      })
+
+      updatedBy.accountFullName = userUpdated.fullName;
+    }
+  }
+
   res.render("admin/pages/products/index", {
-    titlePage: "Trang tổng quan",
+    titlePage: "Danh sách sản phẩm",
     products: products,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword,
@@ -62,7 +84,6 @@ module.exports.products = async (req, res) => {
 
 // [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
-  // console.log(req.params);
   const status = req.params.status;
   const id = req.params.id;
 
@@ -98,7 +119,10 @@ module.exports.changeMulti = async (req, res) => {
         { _id: { $in: ids } },
         {
           deleted: true,
-          deletedAt: new Date(),
+          deletedBy: {
+            account_id: res.locals.user._id,
+            deletedAt: new Date(),
+          },
         }
       );
       req.flash("success", `Xóa ${ids.length} sản phẩm thành công!`);
@@ -124,7 +148,16 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   // console.log(req.get("Referrer") || prefixAdmin);
 
-  await Products.updateOne({ _id: req.params.id }, { deleted: true });
+  await Products.updateOne(
+    { _id: req.params.id },
+    {
+      deleted: true,
+      deletedBy: {
+        account_id: res.locals.user._id,
+        deletedAt: new Date(),
+      },
+    }
+  );
 
   req.flash("success", "Xóa sản phẩm thành công!");
 
@@ -133,8 +166,17 @@ module.exports.deleteItem = async (req, res) => {
 
 // [GET] /admin/products/create
 module.exports.create = async (req, res) => {
+  const find = {
+    deleted: false,
+  };
+
+  let records = await ProductsCategory.find(find).lean();
+
+  records = createTreeHelper.createTree(records);
+
   res.render("admin/pages/products/create", {
     titlePage: "Thêm mới sản phẩm",
+    records: records,
   });
 };
 
@@ -151,7 +193,11 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  const product = await Products(req.body);
+  req.body.createdBy = {
+    account_id: res.locals.user._id,
+  };
+
+  const product = new Products(req.body);
   await product.save();
 
   res.redirect(`${systemConfig.prefixAdmin}/products`);
@@ -167,9 +213,14 @@ module.exports.edit = async (req, res) => {
 
     const product = await Products.findOne(find);
 
+    let records = await ProductsCategory.find({ deleted: false }).lean();
+
+    records = createTreeHelper.createTree(records);
+
     res.render("admin/pages/products/edit", {
       titlePage: "Chỉnh sửa sản phẩm",
       product: product,
+      records: records,
     });
   } catch (error) {
     req.flash("error", "Không tồn tại sản phẩm này!");
@@ -179,13 +230,25 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/products/edit/:id
 module.exports.editPatch = async (req, res) => {
-  req.body.price = parseInt(req.body.price);
-  req.body.discountPercentage = parseInt(req.body.discountPercentage);
-  req.body.stock = parseInt(req.body.stock);
-  req.body.position = parseInt(req.body.position);
-
   try {
-    await Products.updateOne({ _id: req.params.id }, req.body);
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+    req.body.position = parseInt(req.body.position);
+
+    const updatedBy = {
+      account_id: res.locals.user._id,
+      updatedAt: new Date(),
+    };
+
+    await Products.updateOne(
+      { _id: req.params.id },
+      {
+        ...req.body,
+        $push: { updatedBy: updatedBy },
+      }
+    );
+
     req.flash("success", "Cập nhật sản phẩm thành công!");
   } catch (error) {
     req.flash("error", "Cập nhật sản phẩm thất bại!");
@@ -194,6 +257,7 @@ module.exports.editPatch = async (req, res) => {
   res.redirect("back");
 };
 
+// [PATCH] /admin/products/detail/:id
 module.exports.detail = async (req, res) => {
   try {
     const find = {
@@ -202,9 +266,12 @@ module.exports.detail = async (req, res) => {
     };
     const product = await Products.findOne(find);
 
+    const category = await ProductsCategory.findOne({ _id: product.category });
+
     res.render("admin/pages/products/detail", {
       titlePage: product.title,
       product: product,
+      category: category.title,
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);

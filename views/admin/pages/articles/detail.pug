@@ -1,0 +1,39 @@
+extends ../../layouts/default.pug
+
+block main 
+  if role.permissions.includes("articles_view")
+    h1(class="mb-4") Chi tiết sản phẩm 
+    
+    if record.title 
+      div(class="mb-4") 
+        h2 <b>#{record.title}</b>
+    
+    if category 
+      div(class="mb-4") Danh mục: <b>#{category}</b>
+
+    if record.thumbnail 
+      .mb-4 
+        img(
+          src=record.thumbnail 
+          style="width: 100px"
+        ) 
+    
+    if record.status 
+      .mb-4 
+        span Trạng thái:
+        if record.status == "active"
+          span(class="badge text-bg-success") Hoạt động
+        else
+          span(class="badge text-bg-danger") Dừng hoạt động
+
+    if record.position 
+      div(class="mb-4") Vị trí: <b>#{record.position}</b>
+
+    if record.description 
+      div(class="mb-4") !{record.description}
+    
+    if role.permissions.includes("articles_edit")
+      a(
+        href=`${prefixAdmin}/articles/edit/${record.id}`
+        class="btn btn-success"
+      ) Chỉnh sửa sản phẩm

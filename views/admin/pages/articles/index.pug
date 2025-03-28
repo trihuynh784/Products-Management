@@ -8,11 +8,11 @@ include ../../mixins/sort.pug
 include ../../mixins/moment.pug
 
 block main
-  if role.permissions.includes("products_view")
+  if role.permissions.includes("articles_view")
     +alert-success(5000)
     +alert-error(3000)
 
-    h1 Danh sách sản phẩm
+    h1 Danh sách bài viết
 
     .card.mb-3 
       .card-header Bộ lọc và tìm kiếm
@@ -29,19 +29,29 @@ block main
       .card-body
         .row
           .col-4
-            +sort()
+            div(sort)
+              select(
+                name="sort"
+                class="form-control"
+                sort-select
+              )
+                option(value="position-desc") Vị trí giảm dần
+                option(value="position-asc") Vị trí tăng dần
+                option(value="title-asc") Tiêu đề A - Z
+                option(value="title-desc") Tiêu đề Z - A
+              button(class="btn btn-danger mt-2" sort-clear) Clear
 
     .card.mb-3 
       .card-header Danh sách
       .card-body 
         .row 
           .col-8
-            if role.permissions.includes("products_edit")
-              +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+            //- if role.permissions.includes("articles_edit")
+            //-   +form-change-multi(`${prefixAdmin}/articles/change-multi?_method=PATCH`)
           .col-4 
-            if role.permissions.includes("products_create")
+            if role.permissions.includes("articles_create")
               a(
-                href=`${prefixAdmin}/products/create`
+                href=`${prefixAdmin}/articles/create`
                 class="btn btn-outline-success"
               ) + Thêm mới
 
@@ -51,13 +61,12 @@ block main
         )
           thead 
             tr 
-              if role.permissions.includes("products_edit")
+              if role.permissions.includes("articles_edit")
                 th 
                   input(type="checkbox" name="checkAll")
               th STT
               th Hình ảnh
               th Tiêu đề
-              th Giá
               th Vị trí
               th Trạng thái
               th Người tạo
@@ -65,12 +74,13 @@ block main
               th Hành động 
 
           tbody 
-            each item, index in products
+            each item, index in articles
               tr
-                if role.permissions.includes("products_edit")
+                if role.permissions.includes("articles_edit")
                   td 
                     input(type="checkbox" name="id" value=item.id) 
-                td #{pagination.limitProducts * (pagination.currentPage - 1) + index + 1}
+                //- td #{pagination.limitArticles * (pagination.currentPage - 1) + index + 1}
+                td #{index + 1}
                 td 
                   img(
                   src=item.thumbnail
@@ -79,7 +89,6 @@ block main
                   height="auto"
                   )
                 td #{item.title}
-                td #{item.price}$
                 td 
                   input(
                     type="number"
@@ -90,7 +99,7 @@ block main
                   )
                 td 
                   if (item.status == "active")
-                    if role.permissions.includes("products_edit")
+                    if role.permissions.includes("articles_edit")
                       a(
                         href="javascript:;" 
                         data-status=item.status
@@ -100,11 +109,10 @@ block main
                       ) Hoạt động 
                     else 
                       span(
-                        data-id=item.id 
                         class="badge text-bg-success"
                       ) Hoạt động 
                   else 
-                    if role.permissions.includes("products_edit")
+                    if role.permissions.includes("articles_edit")
                       a(
                         href="javascript:;" 
                         data-status=item.status
@@ -118,8 +126,8 @@ block main
                         class="badge text-bg-danger"
                       ) Dừng hoạt động 
                 td 
-                  if (item.createdBy.account_id)
-                    span #{item.accountFullName}
+                  if (item.createdBy)
+                    span #{item.createdBy.fullName}
                     +formatDate(item.createdBy.createdAt)
                 td 
                   - const updatedBy = item.updatedBy.slice(-1)[0]
@@ -129,35 +137,35 @@ block main
                     
                 td 
                   a(
-                    href=`${prefixAdmin}/products/detail/${item.id}`
+                    href=`${prefixAdmin}/articles/detail/${item.id}`
                     class="btn btn-secondary btn-sm"
                     button-edit-item
                   ) Chi tiết
-                  if role.permissions.includes("products_edit")
+                  if role.permissions.includes("articles_edit")
                     a(
-                      href=`${prefixAdmin}/products/edit/${item.id}`
+                      href=`${prefixAdmin}/articles/edit/${item.id}`
                       class="btn btn-warning btn-sm"
                       button-edit-item
                     ) Sửa
-                  if role.permissions.includes("products_delete")
+                  if role.permissions.includes("articles_delete")
                     button(
                       class="btn btn-danger btn-sm ml-1"
                       id="button-delete-item"
                       value=item.id
                     ) Xóa
 
-    +pagination(pagination)
+    //- +pagination(pagination)
 
     form(
       action=""
       method="POST"
       id="form-change-status"
-      data-path=`${prefixAdmin}/products/change-status`
+      data-path=`${prefixAdmin}/articles/change-status`
     ) 
 
     form(
       action=""
       method="POST"
       id="form-delete-item"
-      data-path=`${prefixAdmin}/products/delete-item`
+      data-path=`${prefixAdmin}/articles/delete-item`
     )
