@@ -32,14 +32,16 @@ module.exports.index = async (req, res) => {
 
   records = createTreeHelper.createTree(records);
 
-  for (const record of records) {
-    const updatedBy = record.updatedBy.slice(-1)[0];
-    if (updatedBy) {
-      const user = await Account.findOne({
-        _id: updatedBy.account_id,
-      });
-
-      updatedBy.fullName = user.fullName;
+  for (const record of records) {  
+    const lastIndex = record.updatedBy.length - 1;
+    if (lastIndex >= 0) {
+      const updatedBy = record.updatedBy[lastIndex];
+  
+      const user = await Account.findOne({ _id: updatedBy.account_id });
+  
+      if (user) {
+        record.updatedBy[lastIndex].fullName = user.fullName;
+      }
     }
   }
 

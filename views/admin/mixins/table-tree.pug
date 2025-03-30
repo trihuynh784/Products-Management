@@ -53,6 +53,7 @@ mixin table-tree(records, level = 1)
         if updatedBy
           span #{updatedBy.fullName}
           +formatDateTime(updatedBy.updatedAt)
+
       td 
         a(
           href=`${prefixAdmin}/products-category/detail/${item.id}`
