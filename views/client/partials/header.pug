@@ -6,7 +6,7 @@ header.header
       .col-3 
         .inner-logo 
           a(href="/")
-            img(src="/client/images/logo.svg" alt="logo")
+            img(src="/client/images/logo.png" alt="logo")
 
       .col-5
         form(
@@ -38,4 +38,14 @@ header.header
               +sub-menu(pathProduct, category)
             li 
               a(href="/cart") Giỏ hàng (#{miniCart ? miniCart.totalQuantity : 0})
+            if !user
+              li 
+                a(href="/user/login") Đăng nhập
+              li 
+                a(href="/user/register") Đăng ký
+            else 
+              li 
+                a(href="/user/detail") Trang cá nhân
+              li 
+                a(href="/user/logout") Đăng xuất
     

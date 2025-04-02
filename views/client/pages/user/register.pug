@@ -1,17 +1,26 @@
-extends ../../layouts/auth.pug
+extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main 
-  +alert-error(4000)
+  +alert-error(5000)
 
   .container.my-5 
     .row.justify-content-center 
       .col-8 
-        h1(class="text-center") Đăng nhập 
+        h1(class="text-center") Đăng ký tài khoản
         form(
-          action=`${prefixAdmin}/auth/login`
+          action=`/user/register`
           method="POST"
         )
+          div(class="form-group")
+            label(for="fullName") Họ và tên
+            input(
+              type="fullName"
+              class="form-control"
+              id="fullName"
+              name="fullName"
+              required 
+            ) 
           div(class="form-group")
             label(for="email") Email
             input(
@@ -34,5 +43,5 @@ block main
             button(
               type="submit"
               class="btn btn-primary btn-block"
-            ) Đăng nhập
+            ) Đăng ký
           

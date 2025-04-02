@@ -11,3 +11,22 @@ mixin product-item(item)
         .inner-price-new #{item.priceNew}$
         .inner-price-old #{item.price}$
         .inner-discount #{item.discountPercentage}%
+  
+mixin product-item-beauty(item)
+  .col-md-4.col-12.mb-3
+    .card.product-card.p-3.position-relative
+      if item.featured == "1"
+        span.badge-featured Nổi bật
+      .image-container
+        img.card-img-top(src=item.thumbnail alt=item.title)
+      .card-body.text-center
+        h5.card-title.text-primary
+          a(href=`/products/detail/${item.slug}`) #{item.title}
+        p.text-success.fw-bold.mt-3.fs-5 #{item.priceNew}$
+        p.old-price #{item.price}$
+        .discount -#{item.discountPercentage}%
+        button(
+          product-id=item._id 
+          button-buy-now
+          class="btn btn-primary mb-1"
+        ) Mua ngay

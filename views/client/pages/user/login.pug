@@ -1,15 +1,15 @@
-extends ../../layouts/auth.pug
+extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main 
-  +alert-error(4000)
+  +alert-error(5000)
 
   .container.my-5 
     .row.justify-content-center 
       .col-8 
-        h1(class="text-center") Đăng nhập 
+        h1(class="text-center") Đăng nhập
         form(
-          action=`${prefixAdmin}/auth/login`
+          action=`/user/login`
           method="POST"
         )
           div(class="form-group")
@@ -30,9 +30,10 @@ block main
               name="password"
               required 
             ) 
-          div(class="form-group mt-2")
+          div(class="form-group mt-2 text-right")
             button(
               type="submit"
               class="btn btn-primary btn-block"
             ) Đăng nhập
+        a(href="/user/password/forgot") Quên mật khẩu ?
           

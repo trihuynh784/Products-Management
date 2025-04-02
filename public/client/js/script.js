@@ -11,3 +11,19 @@ if (showAlert) {
   }, parseInt(showAlert.getAttribute("data-time")));
 }
 // End Show Alert
+
+// Buy Now
+const formBuyNow = document.querySelector("[form-buy-now]");
+if (formBuyNow) {
+  const buttonsBuyNow = document.querySelectorAll("[button-buy-now]");
+  buttonsBuyNow.forEach((button) => {
+
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("product-id");
+
+      formBuyNow.action = `/checkout/buynow/${productId}`;
+      formBuyNow.submit();
+    });
+  });
+}
+// End Buy Now

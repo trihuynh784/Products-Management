@@ -1,18 +1,20 @@
 const mongoose = require("mongoose");
 const generate = require("../helpers/generate");
 
-const accountSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   fullName: String,
   email: String,
   password: String,
-  token: {
+  tokenUser: {
     type: String,
     default: generate.generateToken(20),
   },
   phone: String,
-  role_id: String,
   avatar: String,
-  status: String,
+  status: {
+    type: String,
+    default: "active"
+  },
   deleted: {
     type: Boolean,
     default: false
@@ -22,6 +24,6 @@ const accountSchema = new mongoose.Schema({
   timestamps: true
 })
 
-const Account = mongoose.model("Account", accountSchema, "accounts");
+const User = mongoose.model("User", userSchema, "users");
 
-module.exports = Account;
+module.exports = User;
