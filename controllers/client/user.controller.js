@@ -142,7 +142,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
             </td>
         </tr>
     </table>`;
-  sendMailHelper.send(email, subject, html);
+  await sendMailHelper.send(email, subject, html);
 
   res.redirect(`/user/password/otp?email=${email}`);
 };
