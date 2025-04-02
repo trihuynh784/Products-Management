@@ -121,7 +121,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
   await forgotPassword.save();
 
   // Đoạn này sẽ gửi mã OTP về gmail
-  const subject = `Mã OTP của bạn: 785432 - Không chia sẻ với bất kỳ ai!`;
+  const subject = `Mã OTP của bạn: ${otp} - Không chia sẻ với bất kỳ ai!`;
   const html = `<table align="center" width="100%" style="max-width: 500px; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
         <tr>
             <td align="center">
