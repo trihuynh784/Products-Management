@@ -1,0 +1,55 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title 404 Not Found
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+
+      .container {
+        text-align: center;
+      }
+
+      .error-code {
+        font-size: 150px;
+        font-weight: bold;
+        color: #f44336;
+      }
+
+      .message {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 35px;
+      }
+
+      .home-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .home-btn:hover {
+        background-color: #45a049;
+      }
+
+  body
+    .container
+      .error-code 404
+      .message Oops! Page not found.
+      a(href="/" class="home-btn") Go Back Home

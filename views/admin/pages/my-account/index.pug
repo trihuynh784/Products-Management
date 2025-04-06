@@ -1,38 +1,98 @@
+//- extends ../../layouts/default.pug
+
+//- block main 
+//-   h1(class="mb-4") Thông tin cá nhân
+  
+//-   if user.fullName 
+//-     div(class="mb-4") 
+//-       h2 <b>#{user.fullName}</b>
+  
+//-   if user.email
+//-     div(class="mb-4") Email: <b>#{user.email}</b>
+  
+//-   if user.phone 
+//-     div(class="mb-4") Số điện thoại: <b>#{user.phone}</b>
+  
+//-   if role.title
+//-     div(class="mb-4") Phân quyền: <b>#{role.title}</b>
+
+//-   if user.avatar 
+//-     .mb-4 
+//-       img(
+//-         src=user.avatar 
+//-         style="width: 100px"
+//-       ) 
+  
+//-   if user.status 
+//-     .mb-4 
+//-       span Trạng thái:
+//-       if user.status == "active"
+//-         span(class="badge text-bg-success") Hoạt động
+//-       else
+//-         span(class="badge text-bg-danger") Dừng hoạt động
+
+//-   if role.permissions.includes("account_edit")
+//-     a(
+//-       href=`${prefixAdmin}/my-account/edit`
+//-       class="btn btn-success"
+//-     ) Chỉnh sửa tài khoản
 extends ../../layouts/default.pug
 
 block main 
-  h1(class="mb-4") Thông tin cá nhân
-  
-  if user.fullName 
-    div(class="mb-4") 
-      h2 <b>#{user.fullName}</b>
-  
-  if user.email
-    div(class="mb-4") Email: <b>#{user.email}</b>
-  
-  if user.phone 
-    div(class="mb-4") Số điện thoại: <b>#{user.phone}</b>
-  
-  if role.title
-    div(class="mb-4") Phân quyền: <b>#{role.title}</b>
+  if role.permissions.includes("account_view")
+    .container.mt-4
+      .card.shadow-lg.rounded-4.p-4
+        .d-flex.justify-content-between.align-items-center.mb-4
+          h1.text-dark Chi tiết tài khoản
+          if role.permissions.includes("account_edit")
+            a.btn.btn-primary.fw-bold.px-4.py-2.rounded-3(
+              href=`${prefixAdmin}/my-account/edit`
+            )
+              i.bi.bi-pencil-square.me-2
+              | Chỉnh sửa
 
-  if user.avatar 
-    .mb-4 
-      img(
-        src=user.avatar 
-        style="width: 100px"
-      ) 
-  
-  if user.status 
-    .mb-4 
-      span Trạng thái:
-      if user.status == "active"
-        span(class="badge text-bg-success") Hoạt động
-      else
-        span(class="badge text-bg-danger") Dừng hoạt động
+        .row.align-items-center
+          .col-md-4.text-center
+            if user.avatar
+              img.rounded-circle.border.shadow-lg(
+                src=user.avatar
+                style="width: 200px; height: 200px; object-fit: cover; border: 4px solid #ddd"
+              )
+            else
+              .avatar-placeholder.rounded-circle.d-flex.align-items-center.justify-content-center(
+                style="width: 150px; height: 150px; background: #f0f0f0; color: #aaa; font-size: 3rem"
+              )
+                i.bi.bi-person-circle
 
-  if role.permissions.includes("account_edit")
-    a(
-      href=`${prefixAdmin}/my-account/edit`
-      class="btn btn-success"
-    ) Chỉnh sửa tài khoản
+          .col-md-8
+            if user.fullName
+              h2.text-primary.fw-bold
+                i.bi.bi-person-fill.me-2
+                | #{user.fullName}
+
+            if user.email
+              p.text-muted.fs-5
+                i.bi.bi-envelope.me-2
+                | Email: 
+                span.text-dark #{user.email}
+
+            if user.phone
+              p.text-muted.fs-5
+                i.bi.bi-telephone.me-2
+                | Số điện thoại: 
+                span.text-dark #{user.phone}
+
+            if accountRole
+              p.text-muted.fs-5
+                i.bi.bi-shield-lock.me-2
+                | Nhóm quyền: 
+                span.text-dark #{accountRole}
+
+            if user.status
+              p.fs-5
+                i.bi.bi-circle-fill.me-2(style=`color: ${user.status == "active" ? "#28a745" : "#dc3545"}`)
+                | Trạng thái: 
+                - const status = user.status == "active" ? "success" : "danger"
+                span(class=`.badge rounded-pill px-3 py-2 fs-6 text-bg-${status}`)
+                  | #{user.status == "active" ? "Hoạt động" : "Dừng hoạt động"}
+

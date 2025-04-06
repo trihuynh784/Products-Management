@@ -1,4 +1,5 @@
 const User = require("../../models/user.model");
+const Cart = require("../../models/cart.model");
 const ForgotPassword = require("../../models/forgot-password.model");
 const md5 = require("md5");
 
@@ -34,6 +35,16 @@ module.exports.loginPost = async (req, res) => {
     req.flash("error", "Tài khoản đã bị khóa!");
     res.redirect("back");
     return;
+  }
+
+  const isExistUserIdInCart = await Cart.findOne({ user_id: user._id });
+  if (isExistUserIdInCart) {
+    res.cookie("cartId", isExistUserIdInCart._id);
+  } else {
+    await Cart.updateOne(
+      { _id: req.cookies.cartId },
+      { user_id: user._id }
+    );
   }
 
   res.cookie("tokenUser", user.tokenUser);
@@ -73,6 +84,7 @@ module.exports.registerPost = async (req, res) => {
 // [GET] /user/logout
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
+  res.clearCookie("cartId");
   req.flash("success", "Đăng xuất thành công!");
   res.redirect("/");
 };
@@ -198,11 +210,11 @@ module.exports.resetPassword = async (req, res) => {
 // [POST] /user/password/reset
 module.exports.resetPasswordPost = async (req, res) => {
   const password = req.body.password;
-  const email = req.cookies.tokenUser;
+  const tokenUser = req.cookies.tokenUser;
 
   await User.updateOne(
     {
-      email: email,
+      tokenUser: tokenUser,
     },
     {
       password: md5(password),
@@ -211,4 +223,27 @@ module.exports.resetPasswordPost = async (req, res) => {
 
   req.flash("success", "Đổi mật khẩu thành công!");
   res.redirect("/");
+};
+
+// [GET] /user/detail
+module.exports.detail = async (req, res) => {
+  res.render("client/pages/user/detail", {
+    titlePage: "Trang cá nhân",
+  });
+};
+
+// [PATCH] /user/detail
+module.exports.detailPatch = async (req, res) => {
+  switch (req.body.changeAvatar) {
+    case "delete":
+      req.body.avatar = "";
+      break;
+    default:
+      delete req.body.changeAvatar;
+      break;
+  }
+  await User.updateOne({ _id: res.locals.user._id }, req.body);
+
+  req.flash("success", "Cập nhật thông tin thành công!");
+  res.redirect("back");
 };

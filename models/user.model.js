@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     default: generate.generateToken(20),
   },
   phone: String,
+  address: String,
   avatar: String,
   status: {
     type: String,

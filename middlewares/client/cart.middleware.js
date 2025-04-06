@@ -5,9 +5,8 @@ module.exports.cartId = async (req, res, next) => {
     const cart = new Cart();
     await cart.save();
 
-    const expires = 1000 * 60 * 60 * 24 * 365;
+    const expires = 1000 * 60 * 60 * 24 * 30;
 
-    console.log(cart);
     res.cookie("cartId", cart._id, { expires: new Date(Date.now() + expires) });
   } else {
     const cart = await Cart.findOne({

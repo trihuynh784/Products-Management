@@ -1,0 +1,70 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main 
+  +alert-success(4000)
+  +alert-error(4000)
+  if user
+    section(style='background-color: #eee;')
+      .container.py-5
+        form(
+          action="/user/detail?_method=PATCH"
+          class="row align-items-center"
+          enctype="multipart/form-data"
+          method="POST"
+        )
+          .col-lg-4
+            .card.mb-4
+              .card-body.text-center.d-flex.flex-column.align-items-center
+                .mb-1(upload-image)
+                  input(
+                    name="avatar"
+                    id="avatar"
+                    type='file' 
+                    accept='image/*' 
+                    class="d-none"
+                    upload-image-input
+                  )
+                  input(
+                    name="changeAvatar"
+                    value=""
+                    type="text"
+                    class="d-none"
+                    change-avatar
+                  )
+                  label(for="avatar" class="d-block btn btn-primary mt-2") Chọn ảnh đại diện
+                  .image-wrapper.position-relative
+                    img.image-preview(
+                      src=user.avatar
+                      upload-image-preview
+                    )
+                    button.btn-close-image.d-none(type="button" close-image-preview) X
+          .col-lg-8
+            .card.mb-4
+              .card-body
+                .mb-3
+                  label.form-label(for='fullName') Họ và tên
+                  input#fullName.form-control(type='text' value=user.fullName || "" placeholder="Nhập họ tên" name="fullName")
+                .mb-3
+                  label.form-label(for='email') Email
+                  input#email.form-control(
+                    type='email'
+                    value=user.email
+                    name="email"
+                    required
+                  )
+                .mb-3
+                  label.form-label(for='phone') Số điện thoại
+                  input#phone.form-control(type='text' 
+                  placeholder='Nhập số điện thoại'
+                  value=user.phone name="phone")
+                .mb-3
+                  label.form-label(for='address') Địa chỉ
+                  input#address.form-control(
+                    type='text'
+                    placeholder='Nhập địa chỉ'
+                    name="address"
+                    value=user.address
+                  )
+                button.btn.btn-primary(type='submit') Cập Nhật

@@ -1,4 +1,85 @@
 extends ../../layouts/default.pug
 
 block main
-  h1 Trang tổng quan 
+  section(style='background-color: #eee;')
+    .container.py-5
+      .row.align-items-center
+        .col-lg-4
+          .card.mb-4
+            .card-body.text-center
+              img.img-fluid(src=user.avatar alt='avatar' style='width: 150px;')
+              h5.mt-2 #{user.fullName}
+              p.text-muted.mb-1 #{role.title}
+
+        .col-lg-8
+          .card.mb-2
+            .card-body
+              .row
+                .col-sm-3
+                  p.mb-0 Họ và tên:
+                .col-sm-9
+                  p.text-muted.mb-0 
+                    b #{user.fullName}
+              hr
+              .row
+                .col-sm-3
+                  p.mb-0 Quyền:
+                .col-sm-9
+                  p.text-muted.mb-0 
+                    b #{role.title}
+              hr
+              .row
+                .col-sm-3
+                  p.mb-0 Email:
+                .col-sm-9
+                  p.text-muted.mb-0 
+                    b #{user.email}
+              hr
+              .row
+                .col-sm-3
+                  p.mb-0 Số điện thoại:
+                .col-sm-9
+                  p.text-muted.mb-0 
+                    b #{user.phone}
+
+  .row.mt-4
+    .col-6 
+      .card.mb-4.bg-light.bg-gradient
+        .card-header Danh mục sản phẩm 
+        .card-body 
+          p Số lượng: 
+            b #{statistic.productCategory.total}
+          p Hoạt động: 
+            b #{statistic.productCategory.active}
+          p Dừng hoạt động: 
+            b #{statistic.productCategory.inactive}
+    .col-6 
+      .card.mb-4.bg-light.bg-gradient
+        .card-header Danh sách sản phẩm 
+        .card-body 
+          p Số lượng: 
+            b #{statistic.product.total}
+          p Hoạt động: 
+            b #{statistic.product.active}
+          p Dừng hoạt động: 
+            b #{statistic.product.inactive}
+    .col-6 
+      .card.mb-4.bg-light.bg-gradient
+        .card-header Tài khoản admin
+        .card-body 
+          p Số lượng: 
+            b #{statistic.account.total}
+          p Hoạt động: 
+            b #{statistic.account.active}
+          p Dừng hoạt động: 
+            b #{statistic.account.inactive}
+    .col-6 
+      .card.mb-4.bg-light.bg-gradient
+        .card-header Tài khoản user
+        .card-body 
+          p Số lượng: 
+            b #{statistic.user.total}
+          p Hoạt động: 
+            b #{statistic.user.active}
+          p Dừng hoạt động: 
+            b #{statistic.user.inactive}

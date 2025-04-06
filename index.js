@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const moment = require("moment");
+const { Server } = require("socket.io");
+const { createServer } = require("http");
 require("dotenv").config();
 
 const database = require("./config/database");
@@ -17,6 +19,11 @@ const systemAdmin = require("./config/system");
 
 const app = express();
 const port = process.env.PORT;
+
+// SocketIO
+const server = createServer(app);
+const io = new Server(server);
+global._io = io;
 
 // Flash Message
 app.use(cookieParser('UHSDFWAEFVPOQIWRBV'));
@@ -43,7 +50,12 @@ app.use(express.static(`${__dirname}/public`));
 // Routes
 routeAdmin(app);
 route(app);
+app.get("*", (req, res) => {
+  res.render("client/pages/errors/404-not-found", {
+    titlePage: "404 NOT FOUND"
+  })
+})
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`App listening on port ${port}`)
 });

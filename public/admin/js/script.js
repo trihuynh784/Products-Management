@@ -107,7 +107,8 @@ if (buttonsChangeStatus.length) {
   const path = formChangeStatus.getAttribute("data-path");
   buttonsChangeStatus.forEach((button) => {
     button.addEventListener("click", () => {
-      const status = button.getAttribute("data-status") == "active" ? "inactive" : "active";
+      const status =
+        button.getAttribute("data-status") == "active" ? "inactive" : "active";
       const id = button.getAttribute("data-id");
       formChangeStatus.action = path + `/${status}/${id}?_method=PATCH`;
       formChangeStatus.submit();
@@ -209,27 +210,55 @@ if (showAlert) {
 }
 // End Show Alert
 
-// Upload Image
+// Upload Image Preview
 const uploadImage = document.querySelector("[upload-image]");
 if (uploadImage) {
-  const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
-  const uploadImagePreview = uploadImage.querySelector(
-    "[upload-image-preview]"
-  );
-  const closeImagePreview = uploadImage.querySelector("[close-image-preview]");
+  const input = uploadImage.querySelector("[upload-image-input]");
+  const changeAvatar = uploadImage.querySelector("[change-avatar]");
+  const preview = uploadImage.querySelector("[upload-image-preview]");
+  const closeBtn = uploadImage.querySelector("[close-image-preview]");
 
-  closeImagePreview.addEventListener("click", () => {
-    uploadImageInput.value = "";
-    uploadImagePreview.src = "";
-  });
+  const togglePreview = (show) => {
+    closeBtn.classList.toggle("d-none", !show);
+  };
 
-  uploadImageInput.addEventListener("change", (e) => {
-    const [file] = e.target.files;
-
+  input.addEventListener("change", (e) => {
+    const file = e.target.files?.[0];
     if (file) {
-      uploadImagePreview.src = URL.createObjectURL(file);
-      closeImagePreview.classList.remove("dis-none");
+      preview.src = URL.createObjectURL(file);
+      togglePreview(true);
     }
   });
+
+  closeBtn.addEventListener("click", () => {
+    changeAvatar.value = "delete";
+    preview.src = "";
+    togglePreview(false);
+  });
+
+  if (preview.getAttribute("src") == "") {
+    togglePreview(false);
+  } else {
+    togglePreview(true);
+  }
 }
-// End Upload Image
+// End Upload Image Preview
+
+// Side Bar
+const toggleBtn = document.getElementById("toggleSidebar");
+if (toggleBtn) {
+  const sider = document.querySelector(".body .sider");
+  const main = document.querySelector(".body .main");
+  const toggle = sider.querySelector(".toggle")
+  const toggleCollapse = sider.querySelector(".toggle-collapse")
+  const togglePosition = sider.querySelector(".toggle-position");
+
+  toggleBtn.addEventListener("click", () => {
+    sider.classList.toggle("collapsed");
+    main.classList.toggle("collapsed");
+    toggle.classList.toggle("d-none");
+    toggleCollapse.classList.toggle("d-none");
+    togglePosition.classList.toggle("text-center");
+  });
+}
+// End Side Bar

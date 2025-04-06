@@ -1,11 +1,12 @@
 header.header 
   .container-fluid 
     .row.align-items-center 
-      .col-3 
+      .col-5
         .inner-logo 
-          a(href="/admin/dashboard") ADMIN
+          a(href="/admin/dashboard" class="fs-2 text-white") ADMIN
+            //- img(src=setting.logo)
 
-      .col-9
+      .col-7
         div(style="text-align: right")
           a(
             href=`${prefixAdmin}/my-account`

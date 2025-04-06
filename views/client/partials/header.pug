@@ -6,9 +6,9 @@ header.header
       .col-3 
         .inner-logo 
           a(href="/")
-            img(src="/client/images/logo.png" alt="logo")
+            img(src=setting.logo alt="logo")
 
-      .col-5
+      .col-4
         form(
           action="/search"
           method="GET"
@@ -27,7 +27,7 @@ header.header
                 type="submit"
               ) Tìm 
 
-      .col-4
+      .col-5
         .inner-menu 
           ul 
             li 
@@ -45,7 +45,13 @@ header.header
                 a(href="/user/register") Đăng ký
             else 
               li 
-                a(href="/user/detail") Trang cá nhân
+                a(href="/chat") Chat
+              if user.fullName != ""
+                li 
+                  a(href="/user/detail") #{user.fullName}
+              else 
+                li 
+                  a(href="/user/detail") Tài khoản
               li 
                 a(href="/user/logout") Đăng xuất
     

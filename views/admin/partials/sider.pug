@@ -1,24 +1,32 @@
-.sider
+.sider.collapsed
   .inner-menu 
     ul 
+      li.text-end.toggle-position.me-2
+        button(id="toggleSidebar" class="btn text-white fs-3") 
+          span.toggle <
+          span.toggle-collapse.d-none >
+          //- i.fa-solid.fa-bars
       li 
-        a(href=`${prefixAdmin}/dashboard`) Tổng quan 
+        a(href=`${prefixAdmin}/dashboard`) <i class="fa-solid fa-gauge"></i> <span class="ms-2">Tổng quan </span>
       if role.permissions.includes("products-category_view")
         li 
-          a(href=`${prefixAdmin}/products-category`) Danh mục sản phẩm
+          a(href=`${prefixAdmin}/products-category`) 	<i class="fas fa-tags"></i> <span class="ms-2">Danh mục sản phẩm</span>
       if role.permissions.includes("products_view")
         li 
-          a(href=`${prefixAdmin}/products`) Danh sách sản phẩm
+          a(href=`${prefixAdmin}/products`) <i class="fas fa-boxes"></i> <span class="ms-2">Danh sách sản phẩm</span>
       if role.permissions.includes("articles_view")
         li 
-          a(href=`${prefixAdmin}/articles`) Danh sách bài viết
+          a(href=`${prefixAdmin}/articles`) <i class="fas fa-newspaper"></i> <span class="ms-2">Danh sách bài viết</span>
       if role.permissions.includes("roles_view")
         li 
-          a(href=`${prefixAdmin}/roles`) Nhóm quyền 
+          a(href=`${prefixAdmin}/roles`) <i class="fas fa-user-shield"></i> <span class="ms-2">Nhóm quyền </span>
       if role.permissions.includes("roles-permissions_view")
         li 
-          a(href=`${prefixAdmin}/roles/permissions`) Phân quyền
+          a(href=`${prefixAdmin}/roles/permissions`) <i class="fas fa-user-lock"></i> <span class="ms-2">Phân quyền</span>
       if role.permissions.includes("account_view")
         li 
-          a(href=`${prefixAdmin}/accounts`) Danh sách tài khoản
-    
+          a(href=`${prefixAdmin}/accounts`) <i class="fa-solid fa-user"></i> <span class="ms-2">Danh sách tài khoản</span>
+      if role.permissions.includes("setting-general")
+        li 
+          a(href=`${prefixAdmin}/settings/general`) <i class="fas fa-cog"></i> <span class="ms-2">Cài đặt chung</span>
+

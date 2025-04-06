@@ -1,17 +1,21 @@
 mixin alert-success(time)
+  - const colorSuccess = '#4CAF50';
   - if (messages.success)
     .message.info
       div(
-        class="alert alert-success"
+        class="alert"
+        style=`background-color: ${colorSuccess};`
         data-time=time
         show-alert
       ) #{messages.success} <span close-alert>X</span>
 
 mixin alert-error(time)
+  - const colorError = '#f44336';
   - if (messages.error)
     .message.info
       div(
-        class="alert alert-danger"
+        class="alert"
+        style=`background-color: ${colorError};`
         data-time=time
         show-alert
       ) #{messages.error} <span close-alert>X</span>

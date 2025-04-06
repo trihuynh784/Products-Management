@@ -1,0 +1,24 @@
+mixin image-show(inputName, title, image)
+  .mb-1(upload-image)
+    input(
+      name=inputName
+      id=inputName
+      type='file' 
+      accept='image/*' 
+      class="d-none"
+      upload-image-input
+    )
+    input(
+      name=`change_${inputName}`
+      value=""
+      type="text"
+      class="d-none"
+      change-avatar
+    )
+    label(for=inputName class="d-inline btn btn-primary mt-2") #{title}
+    .d-block.image-wrapper.position-relative
+      img.image-preview(
+        src=image
+        upload-image-preview
+      )
+      button.btn-close-image.d-none(type="button" close-image-preview) X
