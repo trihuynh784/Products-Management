@@ -18,7 +18,16 @@ block main
               div(class=(chat.user_id == user._id ? "inner-outgoing" : "inner-incoming"))
                 if chat.user_id != user._id
                   .inner-name #{chat.fullName}
-                .inner-content #{chat.content}
+                if chat.content
+                  .inner-content #{chat.content}
+                if chat.images.length
+                  .inner-images
+                    each image of chat.images 
+                      img(src=image)
+            .inner-list-typing
+              .typing-item
+                //- .avatar
+          div(class="custom-file-container" data-upload-id="upload-images")
           .inner-foot 
             form(
               class="inner-form"
@@ -27,9 +36,15 @@ block main
               input(
                 type="text"
                 placeholder="Nhập nội dung..."
+                autocomplete="off"
                 name="content"
               )
-              span.btn.btn-icons 
+              label(
+                class="btn d-flex align-items-center"
+                for="file-upload-with-preview-upload-images"
+              )
+                i.fa-solid.fa-image
+              span.btn.btn-icons.d-flex.align-items-center 
                 i.fa-regular.fa-face-smile
               button 
                 i.fa-solid.fa-paper-plane

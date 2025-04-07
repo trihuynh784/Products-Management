@@ -471,6 +471,32 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
+.inner-images {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 10px; /* Thêm khoảng cách bên trong */
+  background-color: #f7f7f7; /* Màu nền nhẹ cho inner-images */
+  border-radius: 8px; /* Bo góc cho inner-images */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ */
+}
+
+/* Style cho từng ảnh */
+.inner-images img {
+  width: 100px; /* Điều chỉnh kích thước ảnh */
+  height: 100px;
+  object-fit: cover; /* Cắt ảnh sao cho vừa với khung */
+  border-radius: 8px; /* Bo góc ảnh */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng hover */
+}
+
+/* Hover effect cho ảnh */
+.inner-images img:hover {
+  transform: scale(1.02); /* Phóng to ảnh khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ khi hover */
+}
+
 .inner-outgoing .inner-content {
   background: #3b82f6;
   color: white;
@@ -544,3 +570,95 @@ emoji-picker {
   opacity: 1;
 }
 /* End Emoji Picker */
+
+/* Typing */
+.inner-list-typing {
+  position: relative;
+  padding: 0;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin-top: 0;
+}
+
+.typing-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-right: 10px;
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background-color: #3498db;
+  animation: typing 1.5s infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes typing {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/* End Typing */
+
+/* File upload with preview */
+.custom-file-container .label-container {
+  display: none;
+}
+.custom-file-container .input-container{
+  display: none;
+}
+.custom-file-container .image-preview {
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+.custom-file-container .image-preview-item {
+  width: 80px;
+  margin: 10px;
+  padding: 2px;
+}
+/* End File upload with preview */
+
+/* Show Image Chat */
+.inner-images {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
