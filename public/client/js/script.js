@@ -60,3 +60,9 @@ if (uploadImage) {
   }
 }
 // End Upload Image Preview
+
+// Detect browser or tab closing
+window.addEventListener("beforeunload", (e) => {
+  socket.emit("CLIENT_SEND_TAG_ONLINE/OFFLINE");
+});
+// End Detect browser or tab closing

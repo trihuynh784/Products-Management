@@ -1,0 +1,28 @@
+extends ../../layouts/default.pug
+
+block main
+  .container.user-list-container
+    include ../../partials/list-btn-friend.pug
+    
+    h2.my-4.text-center.text-primary 💬 #{titlePage}
+
+    div(data-users-accept=user._id)
+      each user in users
+        .user-card.d-flex.align-items-center.justify-content-between(user-id=user._id)
+          .d-flex.align-items-center.gap-3
+            img.avatar(
+              alt="Avatar" 
+              src=(user.avatar || "/client/uploads/default-user.jpg")
+              )
+            div
+              .username #{user.fullName}
+              .user-status.online Đang hoạt động
+              .user-status.offline.inactive Ngoại tuyến
+          div
+            span.btn-sm.btn-friend.me-2.inactive(disabled) Cả 2 đã trở thành bạn bè
+            button.btn.btn-success.btn-sm.btn-friend.me-2(button-accept-friend=user._id) Chấp nhận
+            span.btn-sm.btn-friend.me-2.inactive(disabled) Đã từ chối kết bạn
+            button.btn.btn-outline-friend.btn-sm.btn-friend(button-cancel-accept=user._id) Từ chối
+
+block script 
+  script(src="/client/js/users.js") 

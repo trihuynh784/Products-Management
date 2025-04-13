@@ -3,16 +3,18 @@ include ../../mixins/box-head.pug
 
 block main 
   .container.my-3 
-    .row 
-      .col-12 
-        +box-head(titlePage)
+
+    include ../../partials/list-btn-friend.pug
 
     .row 
       .col-12 
         .chat(my-id=user._id)
           .inner-head 
-            .inner-avatar TH
-            .inner-name Trí Huỳnh
+            if boxHead.avatar == ""
+              .inner-avatar #{boxHead.title.charAt(0)}
+            else
+              img.inner-avatar(src=boxHead.avatar alt="avatar")
+            .inner-name #{boxHead.title}
           .inner-body 
             each chat in chats 
               div(class=(chat.user_id == user._id ? "inner-outgoing" : "inner-incoming"))
@@ -51,3 +53,6 @@ block main
 
   div(class="tooltip" role="tooltip")
     emoji-picker.light
+
+block script 
+  script(type="module" src="/client/js/chat.js")

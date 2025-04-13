@@ -147,7 +147,7 @@ socket.on("SERVER_RETURN_TYPING", (objTyping) => {
       listTyping.appendChild(typingItem);
       bodyChatToBottom.scrollTop = bodyChatToBottom.scrollHeight;
     }
-  } else {
+  } else if (objTyping.type == "stop-typing") {
     const typingItem = listTyping.querySelector(
       `.typing-item[user-id="${objTyping.user_id}"]`
     );

@@ -45,7 +45,9 @@ header.header
                 a(href="/user/register") Đăng ký
             else 
               li 
-                a(href="/chat") Chat
+                a(href="/users/friend") Bạn bè
+              li 
+                a(href="/rooms-chat") Nhóm
               if user.fullName != ""
                 li 
                   a(href="/user/detail") #{user.fullName}

@@ -1,0 +1,30 @@
+.row
+  .col-12.d-flex.flex-wrap.justify-content-evenly
+  
+    //- Danh sách người dùng
+    .position-relative.m-1
+      a.btn.btn-primary(href="/users/not-friend") Danh sách người dùng
+
+    //- Danh sách bạn bè
+    .position-relative.m-1
+      a.btn.btn-primary(href="/users/friend") Danh sách bạn bè
+      if user.friends && user.friends.length
+        span.badge.bg-danger.position-absolute.top-0.start-100.translate-middle.rounded-pill(badge-length-friends=user._id) #{user.friends.length || 0}
+      else 
+        span.badge.bg-danger.position-absolute.top-0.start-100.translate-middle.rounded-pill(badge-length-friends=user._id)
+
+    //- Lời mời đã gửi
+    .position-relative.m-1
+      a.btn.btn-primary(href="/users/request") Lời mời đã gửi
+      if user.requestFriend && user.requestFriend.length
+        span.badge.bg-danger.position-absolute.top-0.start-100.translate-middle.rounded-pill(badge-length-request-friend=user._id) #{user.requestFriend.length || 0}
+      else 
+        span.badge.bg-danger.position-absolute.top-0.start-100.translate-middle.rounded-pill(badge-length-request-friend=user._id)
+
+    //- Lời mời kết bạn
+    .position-relative.m-1
+      a.btn.btn-primary(href="/users/accept") Lời mời kết bạn
+      if user.acceptFriend && user.acceptFriend.length
+        span.badge.bg-danger.position-absolute.top-0.start-100.translate-middle.rounded-pill(badge-length-accept-friend=user._id) #{user.acceptFriend.length || 0}
+      else 
+        span.badge.bg-danger.position-absolute.top-0.start-100.translate-middle.rounded-pill(badge-length-accept-friend=user._id)

@@ -1,0 +1,49 @@
+extends ../../layouts/default.pug
+
+block main 
+  .chat-container
+    h3.mb-4.text-primary.text-center
+      i.bi.bi-people-fill.me-2
+      | Tạo phòng chat mới
+
+    form(action="/rooms-chat/create", method="POST", enctype="multipart/form-data")
+      .mb-4
+        label.form-label(for="room-name") Tên nhóm
+        input.form-control(type="text", id="room-name", name="title", placeholder="Nhập tên nhóm...", required)
+      .mb-4(upload-image)
+        label.form-label.mb-2 Ảnh đại diện nhóm
+        input(
+          name="avatar"
+          id="avatar"
+          type='file' 
+          accept='image/*' 
+          class="d-none"
+          upload-image-input
+        )
+        input(
+          name="changeAvatar"
+          value=""
+          type="text"
+          class="d-none"
+          change-avatar
+        )
+        label(for="avatar" class="d-block btn btn-primary mt-2") Chọn ảnh đại diện
+        .image-wrapper.position-relative
+          img.image-preview(
+            src=""
+            upload-image-preview
+          )
+          button.btn-close-image.d-none(type="button" close-image-preview) X
+
+      .mb-4
+        label.form-label.mb-2 Thành viên
+        .border.rounded.p-3
+          each friend in friends
+            .form-check
+              input.form-check-input(type="checkbox", name="users", id=`user-${friend._id}`, value=friend._id)
+              label.form-check-label(for=`user-${friend._id}`) #{friend.fullName}
+
+      .d-grid
+        button.btn.btn-success.btn-lg(type="submit")
+          i.bi.bi-check-circle.me-1
+          | Tạo phòng

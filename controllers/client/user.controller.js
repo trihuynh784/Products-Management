@@ -41,11 +41,22 @@ module.exports.loginPost = async (req, res) => {
   if (isExistUserIdInCart) {
     res.cookie("cartId", isExistUserIdInCart._id);
   } else {
-    await Cart.updateOne(
-      { _id: req.cookies.cartId },
-      { user_id: user._id }
-    );
+    await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user._id });
   }
+
+  await User.updateOne(
+    { _id: user._id },
+    {
+      statusOnline: "online",
+    }
+  );
+
+  _io.once("connection", (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_ONLINE/OFFLINE", {
+      user_id: user._id,
+      status: "online",
+    });
+  });
 
   res.cookie("tokenUser", user.tokenUser);
   req.flash("success", "Đăng nhập thành công!");
@@ -83,6 +94,23 @@ module.exports.registerPost = async (req, res) => {
 
 // [GET] /user/logout
 module.exports.logout = async (req, res) => {
+  const user = await User.findOne({ tokenUser: req.cookies.tokenUser });
+  await User.updateOne(
+    {
+      tokenUser: req.cookies.tokenUser,
+    },
+    {
+      statusOnline: "offline",
+    }
+  );
+
+  _io.once("connection", (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_ONLINE/OFFLINE", {
+      user_id: user._id,
+      status: "offline",
+    });
+  });
+
   res.clearCookie("tokenUser");
   res.clearCookie("cartId");
   req.flash("success", "Đăng xuất thành công!");
