@@ -21,7 +21,6 @@ module.exports.products = async (req, res) => {
   if (objectSearch.regex) {
     find.title = objectSearch.regex;
   }
-
   if (req.query.status) {
     find.status = req.query.status;
   }

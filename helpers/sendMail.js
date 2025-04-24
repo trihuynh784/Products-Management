@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-module.exports.send = async (email, subject, html) => {
+module.exports.register = async (email, subject, html) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -12,7 +12,7 @@ module.exports.send = async (email, subject, html) => {
   });
 
   await transporter.sendMail({
-    from: `"OTP RESET PASSWORD 👻👻👻" <${process.env.EMAIL_NAME}>`, // sender address
+    from: `"OTP REGISTER ACCOUNT 👻👻👻" <${process.env.EMAIL_NAME}>`, // sender address
     to: email, // list of receivers
     subject: subject, // Subject line
     html: html, // html body

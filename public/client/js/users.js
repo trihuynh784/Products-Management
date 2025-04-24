@@ -266,7 +266,7 @@ if (acceptRealtime) {
             </div>
           </div>
           <div>
-            <a class="btn btn-primary btn-sm btn-friend me-2" href=`/chat/${data.room_chat_id}`>Nhắn tin</a>
+            <a class="btn btn-primary btn-sm btn-friend me-2" href="/chat/${data.room_chat_id}">Nhắn tin</a>
             <span class="btn-sm btn-friend me-2 inactive" disabled>Đã hủy kết bạn</span>
             <button class="btn btn-danger btn-sm btn-friend me-2" button-delete-friend=${data.infoUser_emit._id}>Xóa kết bạn</button>
           </div>
