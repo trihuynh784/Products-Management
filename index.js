@@ -18,7 +18,7 @@ const routeAdmin = require("./routes/admin/index.route");
 const systemAdmin = require("./config/system");
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 // SocketIO
 const server = createServer(app);
